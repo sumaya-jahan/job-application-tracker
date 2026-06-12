@@ -9,7 +9,6 @@ const jobs = [
         description: "Build responsive user interfaces using HTML, CSS and JavaScript.",
         status: "not-applied"
     },
-
     {
         id: 2,
         company: "CodeCraft",
@@ -20,7 +19,6 @@ const jobs = [
         description: "Develop modern web applications using React.",
         status: "not-applied"
     },
-
     {
         id: 3,
         company: "SoftEdge",
@@ -31,7 +29,6 @@ const jobs = [
         description: "Design clean and user-friendly interfaces.",
         status: "not-applied"
     },
-
     {
         id: 4,
         company: "DataHub",
@@ -42,7 +39,6 @@ const jobs = [
         description: "Develop APIs and manage databases.",
         status: "not-applied"
     },
-
     {
         id: 5,
         company: "NextGen IT",
@@ -53,7 +49,6 @@ const jobs = [
         description: "Work on full-stack JavaScript projects.",
         status: "not-applied"
     },
-
     {
         id: 6,
         company: "Creative Labs",
@@ -64,7 +59,6 @@ const jobs = [
         description: "Improve user experience through research and design.",
         status: "not-applied"
     },
-
     {
         id: 7,
         company: "SkyTech",
@@ -75,7 +69,6 @@ const jobs = [
         description: "Develop interactive web applications.",
         status: "not-applied"
     },
-
     {
         id: 8,
         company: "CloudSphere",
@@ -90,47 +83,81 @@ const jobs = [
 
 const jobsContainer = document.getElementById("jobs-container");
 
+const allTab = document.getElementById("all-tab");
+const interviewTab = document.getElementById("interview-tab");
+const rejectedTab = document.getElementById("rejected-tab");
+
+let currentTab = "all";
+
 function renderJobs() {
 
     jobsContainer.innerHTML = "";
 
-    jobs.forEach(job => {
+    let filteredJobs = jobs;
+
+    if (currentTab === "interview") {
+        filteredJobs = jobs.filter(
+            job => job.status === "interview"
+        );
+    }
+
+    if (currentTab === "rejected") {
+        filteredJobs = jobs.filter(
+            job => job.status === "rejected"
+        );
+    }
+
+    if (filteredJobs.length === 0) {
+
+        jobsContainer.innerHTML = `
+            <div class="empty-state">
+                <h2>No jobs available</h2>
+                <p>Check back soon for new job opportunities</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    filteredJobs.forEach(job => {
 
         const card = document.createElement("div");
 
         card.classList.add("job-card");
 
         card.innerHTML = `
-      <h3>${job.company}</h3>
-      <h4>${job.position}</h4>
+            <h3>${job.company}</h3>
+            <h4>${job.position}</h4>
 
-      <p><strong>Location:</strong> ${job.location}</p>
-      <p><strong>Type:</strong> ${job.type}</p>
-      <p><strong>Salary:</strong> ${job.salary}</p>
+            <p><strong>Location:</strong> ${job.location}</p>
+            <p><strong>Type:</strong> ${job.type}</p>
+            <p><strong>Salary:</strong> ${job.salary}</p>
 
-      <p>${job.description}</p>
+            <p>${job.description}</p>
 
-      <p><strong>Status:</strong> ${job.status.toUpperCase()}</p>
+            <p>
+                <strong>Status:</strong>
+                ${job.status.toUpperCase()}
+            </p>
 
-      <div class="btn-group">
+            <div class="btn-group">
 
-        <button class="interview-btn" data-id="${job.id}">
-          Interview
-        </button>
+                <button class="interview-btn" data-id="${job.id}">
+                    Interview
+                </button>
 
-        <button class="rejected-btn" data-id="${job.id}">
-          Rejected
-        </button>
+                <button class="rejected-btn" data-id="${job.id}">
+                    Rejected
+                </button>
 
-        <button class="delete-btn" data-id="${job.id}">
-          Delete
-        </button>
+                <button class="delete-btn" data-id="${job.id}">
+                    Delete
+                </button>
 
-      </div>
-    `;
+            </div>
+        `;
 
         jobsContainer.appendChild(card);
-
     });
 }
 
@@ -138,23 +165,34 @@ function updateDashboard() {
 
     const total = jobs.length;
 
-    const interview =
-        jobs.filter(job =>
-            job.status === "interview"
-        ).length;
+    const interview = jobs.filter(
+        job => job.status === "interview"
+    ).length;
 
-    const rejected =
-        jobs.filter(job =>
-            job.status === "rejected"
-        ).length;
+    const rejected = jobs.filter(
+        job => job.status === "rejected"
+    ).length;
 
     document.getElementById("total-count").textContent = total;
     document.getElementById("interview-count").textContent = interview;
     document.getElementById("rejected-count").textContent = rejected;
-
-    document.getElementById("job-count").textContent =
-        `${total} jobs`;
+    document.getElementById("job-count").textContent = `${total} jobs`;
 }
+
+allTab.addEventListener("click", () => {
+    currentTab = "all";
+    renderJobs();
+});
+
+interviewTab.addEventListener("click", () => {
+    currentTab = "interview";
+    renderJobs();
+});
+
+rejectedTab.addEventListener("click", () => {
+    currentTab = "rejected";
+    renderJobs();
+});
 
 document.addEventListener("click", function (e) {
 
@@ -162,8 +200,9 @@ document.addEventListener("click", function (e) {
 
         const id = Number(e.target.dataset.id);
 
-        const selectedJob =
-            jobs.find(job => job.id === id);
+        const selectedJob = jobs.find(
+            job => job.id === id
+        );
 
         selectedJob.status = "interview";
 
@@ -171,16 +210,13 @@ document.addEventListener("click", function (e) {
         updateDashboard();
     }
 
-});
-
-document.addEventListener("click", function (e) {
-
     if (e.target.classList.contains("rejected-btn")) {
 
         const id = Number(e.target.dataset.id);
 
-        const selectedJob =
-            jobs.find(job => job.id === id);
+        const selectedJob = jobs.find(
+            job => job.id === id
+        );
 
         selectedJob.status = "rejected";
 
