@@ -91,6 +91,7 @@ const jobs = [
 const jobsContainer = document.getElementById("jobs-container");
 
 function renderJobs() {
+
     jobsContainer.innerHTML = "";
 
     jobs.forEach(job => {
@@ -101,31 +102,30 @@ function renderJobs() {
 
         card.innerHTML = `
       <h3>${job.company}</h3>
-
       <h4>${job.position}</h4>
 
       <p><strong>Location:</strong> ${job.location}</p>
-
       <p><strong>Type:</strong> ${job.type}</p>
-
       <p><strong>Salary:</strong> ${job.salary}</p>
 
       <p>${job.description}</p>
 
-      <p><strong>Status:</strong> NOT APPLIED</p>
+      <p><strong>Status:</strong> ${job.status.toUpperCase()}</p>
 
       <div class="btn-group">
-          <button class="interview-btn">
-            Interview
-          </button>
 
-          <button class="rejected-btn">
-            Rejected
-          </button>
+        <button class="interview-btn" data-id="${job.id}">
+          Interview
+        </button>
 
-          <button class="delete-btn">
-            Delete
-          </button>
+        <button class="rejected-btn" data-id="${job.id}">
+          Rejected
+        </button>
+
+        <button class="delete-btn" data-id="${job.id}">
+          Delete
+        </button>
+
       </div>
     `;
 
@@ -134,4 +134,61 @@ function renderJobs() {
     });
 }
 
+function updateDashboard() {
+
+    const total = jobs.length;
+
+    const interview =
+        jobs.filter(job =>
+            job.status === "interview"
+        ).length;
+
+    const rejected =
+        jobs.filter(job =>
+            job.status === "rejected"
+        ).length;
+
+    document.getElementById("total-count").textContent = total;
+    document.getElementById("interview-count").textContent = interview;
+    document.getElementById("rejected-count").textContent = rejected;
+
+    document.getElementById("job-count").textContent =
+        `${total} jobs`;
+}
+
+document.addEventListener("click", function (e) {
+
+    if (e.target.classList.contains("interview-btn")) {
+
+        const id = Number(e.target.dataset.id);
+
+        const selectedJob =
+            jobs.find(job => job.id === id);
+
+        selectedJob.status = "interview";
+
+        renderJobs();
+        updateDashboard();
+    }
+
+});
+
+document.addEventListener("click", function (e) {
+
+    if (e.target.classList.contains("rejected-btn")) {
+
+        const id = Number(e.target.dataset.id);
+
+        const selectedJob =
+            jobs.find(job => job.id === id);
+
+        selectedJob.status = "rejected";
+
+        renderJobs();
+        updateDashboard();
+    }
+
+});
+
 renderJobs();
+updateDashboard();
