@@ -1,4 +1,4 @@
-const jobs = [
+let jobs = [
     {
         id: 1,
         company: "TechNova Solutions",
@@ -89,6 +89,25 @@ const rejectedTab = document.getElementById("rejected-tab");
 
 let currentTab = "all";
 
+function updateActiveTab() {
+
+    allTab.classList.remove("active-tab");
+    interviewTab.classList.remove("active-tab");
+    rejectedTab.classList.remove("active-tab");
+
+    if (currentTab === "all") {
+        allTab.classList.add("active-tab");
+    }
+
+    if (currentTab === "interview") {
+        interviewTab.classList.add("active-tab");
+    }
+
+    if (currentTab === "rejected") {
+        rejectedTab.classList.add("active-tab");
+    }
+}
+
 function renderJobs() {
 
     jobsContainer.innerHTML = "";
@@ -106,6 +125,9 @@ function renderJobs() {
             job => job.status === "rejected"
         );
     }
+
+    document.getElementById("job-count").textContent =
+        `${filteredJobs.length} jobs`;
 
     if (filteredJobs.length === 0) {
 
@@ -176,22 +198,24 @@ function updateDashboard() {
     document.getElementById("total-count").textContent = total;
     document.getElementById("interview-count").textContent = interview;
     document.getElementById("rejected-count").textContent = rejected;
-    document.getElementById("job-count").textContent = `${total} jobs`;
 }
 
 allTab.addEventListener("click", () => {
     currentTab = "all";
     renderJobs();
+    updateActiveTab();
 });
 
 interviewTab.addEventListener("click", () => {
     currentTab = "interview";
     renderJobs();
+    updateActiveTab();
 });
 
 rejectedTab.addEventListener("click", () => {
     currentTab = "rejected";
     renderJobs();
+    updateActiveTab();
 });
 
 document.addEventListener("click", function (e) {
@@ -224,7 +248,19 @@ document.addEventListener("click", function (e) {
         updateDashboard();
     }
 
+    if (e.target.classList.contains("delete-btn")) {
+
+        const id = Number(e.target.dataset.id);
+
+        jobs = jobs.filter(
+            job => job.id !== id
+        );
+
+        renderJobs();
+        updateDashboard();
+    }
 });
 
 renderJobs();
 updateDashboard();
+updateActiveTab();

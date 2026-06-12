@@ -169,3 +169,7 @@ body {
 .empty-state p {
     color: gray;
 }
+.active-tab {
+    background: #2563eb !important;
+    color: white;
+}
