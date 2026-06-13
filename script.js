@@ -133,8 +133,13 @@ function renderJobs() {
 
         jobsContainer.innerHTML = `
             <div class="empty-state">
+
+                <img src="./images/jobs.png" alt="No Jobs">
+
                 <h2>No jobs available</h2>
+
                 <p>Check back soon for new job opportunities</p>
+
             </div>
         `;
 

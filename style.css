@@ -65,6 +65,14 @@ body {
     margin-bottom: 20px;
 }
 
+.jobs-header h2 {
+    color: #0f2d5c;
+}
+
+#job-count {
+    font-weight: bold;
+}
+
 .tabs {
     display: flex;
     gap: 10px;
@@ -77,10 +85,15 @@ body {
     border-radius: 8px;
     cursor: pointer;
     background: #e5e7eb;
+    transition: 0.3s;
 }
 
-#all-tab {
-    background: #2563eb;
+.tabs button:hover {
+    opacity: 0.9;
+}
+
+.active-tab {
+    background: #2563eb !important;
     color: white;
 }
 
@@ -108,6 +121,7 @@ body {
 
 .job-card p {
     margin-bottom: 10px;
+    line-height: 1.5;
 }
 
 .btn-group {
@@ -117,49 +131,39 @@ body {
     margin-top: 15px;
 }
 
-.interview-btn {
+.interview-btn,
+.rejected-btn,
+.delete-btn {
     border: none;
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 6px;
-    background: green;
     color: white;
     cursor: pointer;
+}
+
+.interview-btn {
+    background: green;
 }
 
 .rejected-btn {
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
     background: red;
-    color: white;
-    cursor: pointer;
 }
 
 .delete-btn {
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
     background: #333;
-    color: white;
-    cursor: pointer;
 }
 
-@media (max-width:768px) {
-
-    .stats {
-        flex-direction: column;
-    }
-
-    #jobs-container {
-        grid-template-columns: 1fr;
-    }
-
-}
 .empty-state {
     background: white;
     padding: 60px;
     text-align: center;
     border-radius: 10px;
+}
+
+.empty-state img {
+    width: 180px;
+    max-width: 100%;
+    margin-bottom: 20px;
 }
 
 .empty-state h2 {
@@ -169,7 +173,24 @@ body {
 .empty-state p {
     color: gray;
 }
-.active-tab {
-    background: #2563eb !important;
-    color: white;
+
+@media (max-width: 768px) {
+
+    .stats {
+        flex-direction: column;
+    }
+
+    .jobs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    #jobs-container {
+        grid-template-columns: 1fr;
+    }
 }
